@@ -24,7 +24,7 @@ export default function ImageGallery({ images }) {
         lightboxRef.current.destroy();
       }
     };
-  });
+  }, [images]);
 
   return (
     <ul className={styles.gallery}>
