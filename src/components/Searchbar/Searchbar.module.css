@@ -1,0 +1,38 @@
+.searchbar {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  background-color: #4661f5;
+  color: white;
+}
+
+.form {
+  display: flex;
+  width: 20%;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 20%;
+  outline: none;
+}
+
+.button {
+  padding: 10px;
+  border: none;
+  border-radius: 40%;
+  background-color: rgb(31, 31, 96);
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.button:hover {
+  background-color: #090644;
+}
+
+.buttonLabel {
+  color: white;
+}
