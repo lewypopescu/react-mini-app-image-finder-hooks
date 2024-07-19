@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -9,34 +9,30 @@ import PropTypes from 'prop-types';
 
 import styles from './ImageGallery.module.css';
 
-class ImageGallery extends Component {
-  componentDidMount() {
-    this.lightbox = new SimpleLightbox(`.${styles.gallery} a`);
-  }
+export default function ImageGallery({ images }) {
+  const lightboxRef = useRef(null);
 
-  componentDidUpdate() {
-    if (this.lightbox) {
-      this.lightbox.refresh();
+  useEffect(() => {
+    if (lightboxRef.current) {
+      lightboxRef.current.refresh();
     } else {
-      this.lightbox = new SimpleLightbox(`.${styles.gallery} a`);
+      lightboxRef.current = new SimpleLightbox(`.${styles.gallery} a`);
     }
-  }
 
-  componentWillUnmount() {
-    if (this.lightbox) {
-      this.lightbox.destroy();
-    }
-  }
+    return () => {
+      if (lightboxRef.current) {
+        lightboxRef.current.destroy();
+      }
+    };
+  });
 
-  render() {
-    return (
-      <ul className={styles.gallery}>
-        {this.props.images.map(image => (
-          <ImageGalleryItem key={image.id} image={image} />
-        ))}
-      </ul>
-    );
-  }
+  return (
+    <ul className={styles.gallery}>
+      {images.map(image => (
+        <ImageGalleryItem key={image.id} image={image} />
+      ))}
+    </ul>
+  );
 }
 
 ImageGallery.propTypes = {
@@ -49,5 +45,3 @@ ImageGallery.propTypes = {
     })
   ).isRequired,
 };
-
-export default ImageGallery;
