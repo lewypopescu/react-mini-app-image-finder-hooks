@@ -4,19 +4,14 @@ import PropTypes from 'prop-types';
 
 import styles from './ImageGalleryItem.module.css';
 
-class ImageGalleryItem extends Component {
-  render() {
-    return (
-      <li className={styles.galleryItem}>
-        <a href={this.props.image.largeImageURL} data-lightbox="gallery">
-          <img
-            src={this.props.image.webformatURL}
-            alt={this.props.image.tags}
-          />
-        </a>
-      </li>
-    );
-  }
+export default function ImageGalleryItem({ image }) {
+  return (
+    <li className={styles.galleryItem}>
+      <a href={image.largeImageURL} data-lightbox="gallery">
+        <img src={image.webformatURL} alt={image.tags} />
+      </a>
+    </li>
+  );
 }
 
 ImageGalleryItem.propTypes = {
@@ -27,5 +22,3 @@ ImageGalleryItem.propTypes = {
     tags: PropTypes.string.isRequired,
   }).isRequired,
 };
-
-export default ImageGalleryItem;
