@@ -9,19 +9,22 @@ import PropTypes from 'prop-types';
 
 import styles from './ImageGallery.module.css';
 
-export default function ImageGallery({ images }) {
+export default function ImageGallery({ images = [] }) {
   const lightboxRef = useRef(null);
 
   useEffect(() => {
-    if (lightboxRef.current) {
-      lightboxRef.current.refresh();
-    } else {
-      lightboxRef.current = new SimpleLightbox(`.${styles.gallery} a`);
+    if (images.length > 0) {
+      if (lightboxRef.current) {
+        lightboxRef.current.refresh();
+      } else {
+        lightboxRef.current = new SimpleLightbox(`.${styles.gallery} a`);
+      }
     }
 
     return () => {
       if (lightboxRef.current) {
         lightboxRef.current.destroy();
+        lightboxRef.current = null;
       }
     };
   }, [images]);

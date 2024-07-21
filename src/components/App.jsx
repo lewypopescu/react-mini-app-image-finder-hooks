@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
@@ -14,71 +14,50 @@ import styles from './App.module.css';
 const API_KEY = '43911097-2767f3575ad906659ba392cfc';
 const PER_PAGE = 12;
 
-export class App extends Component {
-  state = {
-    query: '',
-    images: [],
-    page: 1,
-    loading: false,
-  };
+export function App() {
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      this.fetchImages();
-    }
-  }
-
-  fetchImages = async () => {
-    const { query, page } = this.state;
-
+  useEffect(() => {
     if (query === '') return;
 
-    this.setState({ loading: true });
-    try {
-      const response = await axios.get(
-        `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${PER_PAGE}`
-      );
-      this.setState(prevState => ({
-        images: [...prevState.images, ...response.data.hits],
-        loading: false,
-      }));
-    } catch (error) {
-      console.error('Error fetching images:', error);
-      this.setState({ loading: false });
-    }
+    const fetchImages = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${PER_PAGE}`
+        );
+        setImages(prevImages => [...prevImages, ...response.data.hits]);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, [query, page]);
+
+  const handleSearchSubmit = newQuery => {
+    setQuery(newQuery);
+    setImages([]);
+    setPage(1);
   };
 
-  handleSearchSubmit = newQuery => {
-    this.setState({
-      query: newQuery,
-      images: [],
-      page: 1,
-    });
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  handleLoadMore = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-  };
-
-  render() {
-    const { images, loading } = this.state;
-
-    return (
-      <div className={styles.app}>
-        <Searchbar onSubmit={this.handleSearchSubmit} />
-        <ImageGallery images={images} />
-        {loading && <LoaderComponent />}
-        {images.length > 0 && !loading && (
-          <Button onClick={this.handleLoadMore} />
-        )}
-      </div>
-    );
-  }
+  return (
+    <div className={styles.app}>
+      <Searchbar onSubmit={handleSearchSubmit} />
+      <ImageGallery images={images} />
+      {loading && <LoaderComponent />}
+      {images.length > 0 && !loading && <Button onClick={handleLoadMore} />}
+    </div>
+  );
 }
 
 App.propTypes = {
