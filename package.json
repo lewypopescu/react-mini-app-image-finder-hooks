@@ -1,8 +1,8 @@
 {
-  "name": "goit-react-hw-04-images-hooks",
+  "name": "react-mini-app-image-finder-hooks",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lewypopescu.github.io/goit-react-hw-04-images-hooks/",
+  "homepage": "https://lewypopescu.github.io/react-mini-app-image-finder-hooks/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
